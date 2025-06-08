@@ -43,10 +43,29 @@
         th {
             background-color: #444;
         }
+        .flashes {
+            background-color: #444;
+            color: #ffcc00;
+            padding: 1rem;
+            border: 1px solid #999;
+            list-style-type: none;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
     <main>
+        <!-- flash functionality--to keep you on the main page when getting messages -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
         <h1>Welcome to Brian's Flask App!</h1>
         <h2>Please refer to the user data below.</h2>
 
@@ -72,6 +91,16 @@
         {% else %}
             <p>No users found in the database.</p>
         {% endif %}
+
+        <!--here is the upload form part of the code-->
+        <hr>
+        <h2>Upload a File</h2>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="file">Upload a file:</label>
+            <input type="file" name="file" id="file" required>
+            <button type="submit">Upload</button>
+        </form>
+
     </main>
 </body>
 </html>

@@ -33,6 +33,7 @@ services:
     volumes:
       - ./app:/flask-app/app
       - ./app/templates:/flask-app/app/templates
+      - ./uploads:/flask-app/uploads #mount an upload folder
     depends_on:
       - db
 

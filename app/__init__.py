@@ -50,6 +50,8 @@ def create_app():
                 raise
     #  db.create_all()
 
+    app.secret_key = config('SECRET_KEY', default='supersecretkey')
+
     return app
 
 
