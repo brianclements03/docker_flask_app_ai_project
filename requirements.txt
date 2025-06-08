@@ -1,0 +1,6 @@
+Flask
+gunicorn
+python-decouple
+Flask-SQLAlchemy
+pymysql
+cryptography

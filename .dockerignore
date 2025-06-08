@@ -1,0 +1,7 @@
+# .dockerignore
+
+.vscode
+.git
+__pycache__/
+*.pyc
+deprecated/
