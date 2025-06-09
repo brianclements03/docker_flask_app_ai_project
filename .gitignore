@@ -9,6 +9,7 @@ __pycache__/
 # Ignore uploaded files or user installers
 uploads/
 *.exe
+deprecated/
 
 # Ignore OS or editor files
 .DS_Store
