@@ -1,0 +1,23 @@
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore uploaded files or user installers
+uploads/
+*.exe
+
+# Ignore OS or editor files
+.DS_Store
+*.swp
+.vscode/
+
+# Ignore Docker artifacts
+*.log
+*.pid
+*.sock
+*.db
+*.sqlite3
