@@ -100,6 +100,29 @@
         div.dataTables_filter {
         margin-bottom: 1rem;
         }
+
+        .table-scroll{
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .table-scroll table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-container {
+            max-height: 300px;
+            overflow: auto;
+            margin-bottom: 1rem;
+            border: 1px solid #888
+        }
+
+        .table-container {
+            width: 100%;
+            border-collapse: collapse;
+        }
     </style>
 
     <!-- DataTables CSS -->
@@ -123,25 +146,26 @@
 
         {% if users %}
         <!-- <table> -->
-        <table id="userTable">
-
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table id="userTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
             <p>No users found in the database.</p>
         {% endif %}
