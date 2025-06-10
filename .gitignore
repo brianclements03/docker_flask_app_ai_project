@@ -21,4 +21,4 @@ deprecated/
 *.pid
 *.sock
 *.db
-*.sqlite3
+*.sqlite3zscaler-root.crt
