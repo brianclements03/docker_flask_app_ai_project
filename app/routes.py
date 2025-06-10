@@ -15,7 +15,6 @@ def allowed_file(filename):
         filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
 
 #main app functionality: display web app
-
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -28,21 +27,20 @@ def home():
         return f"Error loading homepage: {e}", 500
 
 
-#new functionality 8jun2025 to add a file-upload functionality to the app
-
+#new functionality to add file-upload functionality
 UPLOAD_FOLDER = '/flask-app/uploads'  # this is inside the container
 
 @main.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
-        # return "No file part", 400 #updating this to flash instead of landing on white page
+        # use flash functionality instead of landing on white page
         flash("No file part", "upload")
         return redirect(url_for('main.home'))
 
     file = request.files['file']
 
     if file.filename == '':
-        # return "No selected file", 400 #ditto above
+        #ditto above
         flash("No selected file", "upload")
         return redirect(url_for('main.home'))
     

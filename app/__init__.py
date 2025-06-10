@@ -3,11 +3,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.models import db #import the db instance
 from decouple import config
-# import os
 import sqlalchemy.exc
 import time
-
-# db = SQLAlchemy() #globally accessible db obj
 
 def create_app():
     app = Flask(__name__)
@@ -21,11 +18,6 @@ def create_app():
 
     # Configure SQLite
     app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL')
-    
-#     (
-#         f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-#         f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
-#     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
@@ -48,7 +40,6 @@ def create_app():
             else:
                 print("Failed to connect to the database after multiple retries.")
                 raise
-    #  db.create_all()
 
     app.secret_key = config('SECRET_KEY', default='supersecretkey')
 
