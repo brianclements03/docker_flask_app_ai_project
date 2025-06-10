@@ -14,6 +14,8 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
 
+#main app functionality: display web app
+
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -34,14 +36,14 @@ UPLOAD_FOLDER = '/flask-app/uploads'  # this is inside the container
 def upload_file():
     if 'file' not in request.files:
         # return "No file part", 400 #updating this to flash instead of landing on white page
-        flash("No file part")
+        flash("No file part", "upload")
         return redirect(url_for('main.home'))
 
     file = request.files['file']
 
     if file.filename == '':
         # return "No selected file", 400 #ditto above
-        flash("No selected file")
+        flash("No selected file", "upload")
         return redirect(url_for('main.home'))
     
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -57,11 +59,29 @@ def upload_file():
             db.session.add(user)
 
         db.session.commit()
-        flash(f"File '{file.filename}' uploaded and {len(df)} records inserted!", "success")
+        flash(f"File '{file.filename}' uploaded and {len(df)} records inserted!", "upload")
     except Exception as e:
-        flash(f"Failed to process file: {e}")
+        flash(f"Failed to process file: {e}", "upload")
     
     return redirect(url_for('main.home'))
 
+# manually add a user using a form in the html
+@main.route('/add_user', methods=['POST'])
+def add_user():
+    name = request.form.get('name')
+    email = request.form.get('email')
 
+    if not name or not email:
+        flash('Name and email are required.', 'add_user')
+        return redirect(url_for('main.home'))
 
+    try:
+        new_user = MyTable(name=name, email=email)
+        db.session.add(new_user)
+        db.session.commit()
+        flash(f"User '{name}' added successfully!", 'add_user')
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Failed to add user: {e}", 'add_user')
+
+    return redirect(url_for('main.home'))

@@ -80,11 +80,20 @@
         }
 
         .flash {
-            background-color: #444;
-            color: #fff;
-            padding: 1rem;
-            border-left: 6px solid #d39430;
-            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+
+        .flash.success {
+            background-color: #2e7d32;
+            color: white;
+        }
+
+        .flash.error {
+            background-color: #c62828;
+            color: white;
         }
 
         /* Add space between filter input and table */
@@ -99,6 +108,16 @@
 </head>
 <body>
     <main>
+
+                <!-- This bit particulary is flash functionality. -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <h1>Welcome to Brian's Flask App!</h1>
         <h2>User Data</h2>
 
@@ -127,25 +146,50 @@
             <p>No users found in the database.</p>
         {% endif %}
 
+        <!-- add user manually flash -->
+        {% with messages = get_flashed_messages(category_filter=['add_user']) %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="flash">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+        <h2>Add a User Manually</h2>
+        <form action="/add_user" method="POST" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <div>
+                <label for="name">Name:</label><br>
+                <input type="text" name="name" id="name" required>
+            </div>
+            <div>
+                <label for="email">Email:</label><br>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div>
+                <button type="submit" style="margin-top: 1.5rem;">Add User</button>
+            </div>
+        </form>
+
         <hr>
         <h2>Upload a File</h2>
 
-        
-        <!-- Flash messages appear near upload -->
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
+        <!-- upload doc flash -->
+        {% with messages = get_flashed_messages(category_filter=['upload']) %}
+            {% if messages %}
+                {% for message in messages %}
                 <div class="flash">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
 
+        <!-- Upload Form functionality -->
         <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form">
             <label for="file">Upload a file:</label>
             <input type="file" name="file" id="file" required>
             <button type="submit">Upload</button>
         </form>
-    </main>
+
+        <hr>
 
     <!-- jQuery and DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
