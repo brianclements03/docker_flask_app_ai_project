@@ -22,3 +22,8 @@ deprecated/
 *.sock
 *.db
 *.sqlite3zscaler-root.crt
+
+# Certificates
+*.crt
+*.pem
+*.key
