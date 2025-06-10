@@ -112,16 +112,21 @@
             border-collapse: collapse;
         }
 
+/*
         .table-container {
             max-height: 300px;
             overflow: auto;
             margin-bottom: 1rem;
             border: 1px solid #888
         }
-
+*/
         .table-container {
             width: 100%;
             border-collapse: collapse;
+        }
+
+        .dataTables_paginate {
+            margin-top: 1rem;
         }
     </style>
 
@@ -225,8 +230,9 @@
                 paging: true,
                 searching: true,
                 info: false,
-                scrollY: "300px", //set table body scroll height
-                scrollCollapse: true
+                scrollY: "300px", //set table body scroll height. only table body scrolls
+                scrollCollapse: true,
+                scroller: true //smoother scrolling
             });
         });
     </script>
