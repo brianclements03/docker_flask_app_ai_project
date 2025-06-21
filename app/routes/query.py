@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template
 from services.embedder import embed_text
 from services.chroma_ingest import search_similar
+from services.prompt_builder import build_sql_prompt
 
 query = Blueprint("query", __name__)
 
@@ -9,6 +10,8 @@ embedding = embed_text(question)
 results = search_similar(embedding)
 
 top_docs = results['documents'][0] #list of strings
+
+prompt = build_sql_prompt(question, top_docs)
 
 @query.route("/query", methods=["POST"])
 def generate_sql():
