@@ -7,3 +7,4 @@ cryptography
 openpyxl
 pandas
 chromadb>=0.4.0
+sentence-transformers

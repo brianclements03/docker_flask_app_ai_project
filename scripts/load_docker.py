@@ -74,9 +74,9 @@ for f in compose_files:
 # Step 3: Tear down existing containers
 print("\n🧹 Stopping and removing any existing containers...")
 try:
-    subprocess.run(cmd + ["down"], check=True)
+    subprocess.run(cmd + ["down"], check=True, capture_output=True)
 except subprocess.CalledProcessError as e:
-    print(f"⚠️ Warning: 'down' failed (possibly nothing was running): {e.stderr.decode()}")
+    print(f"⚠️ Warning: 'down' failed (possibly nothing was running): {e.stderr.decode() if e.stderr else str(e)}")
 
 # Step 4: Bring everything up
 print("\n🚀 Rebuilding and starting all services...")
@@ -95,3 +95,14 @@ import_sql_file(
     container_name="ai_chatbot_db"
 )
 
+def run_schema_ingestion():
+    print("\n📥 Loading schema into ChromaDB...")
+    try:
+        subprocess.run(["python", "scripts/load_schema_to_chroma.py"], check=True)
+        print("✅ Schema loaded into ChromaDB.")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Failed to load schema into ChromaDB:\n{e}")
+        sys.exit(1)
+
+# And call:
+run_schema_ingestion()
