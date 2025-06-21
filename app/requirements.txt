@@ -1,0 +1,9 @@
+Flask
+gunicorn
+python-decouple
+Flask-SQLAlchemy
+pymysql
+cryptography
+openpyxl
+pandas
+chromadb>=0.4.0

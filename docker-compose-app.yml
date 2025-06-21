@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: ./app
+    container_name: flask-app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      PORT: ${PORT}
+    volumes:
+      - ./app:/flask-app/app
+      - ./app/templates:/flask-app/app/templates
+      - ./uploads:/flask-app/uploads
+    depends_on:
+      - db
