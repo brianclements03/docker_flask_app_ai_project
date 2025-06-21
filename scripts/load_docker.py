@@ -10,14 +10,14 @@ compose_files = [
     "docker-compose-app.yml"
 ]
 
-def validate_compose_files(files):
-    for f in files:
-        print(f"🔍 Validating {f}...")
-        try:
-            subprocess.run(["docker-compose", "-f", f, "config"], check=True, capture_output=True)
-        except subprocess.CalledProcessError as e:
-            print(f"❌ Error in {f}:\n{e.stderr.decode()}")
-            sys.exit(1)
+# def validate_compose_files(files):
+#     for f in files:
+#         print(f"🔍 Validating {f}...")
+#         try:
+#             subprocess.run(["docker-compose", "-f", f, "config"], check=True, capture_output=True)
+#         except subprocess.CalledProcessError as e:
+#             print(f"❌ Error in {f}:\n{e.stderr.decode()}")
+#             sys.exit(1)
 
 def wait_for_mysql(container_name="flask-mysql-db", retries=10, delay=2):
     print("\n⏳ Waiting for MySQL to be ready...")
@@ -38,7 +38,7 @@ def wait_for_mysql(container_name="flask-mysql-db", retries=10, delay=2):
 
     raise RuntimeError("❌ MySQL did not become ready in time.")
 
-def import_sql_file(sql_file="mysql-init/insert_data.sql", db_name="ragdb", container_name="flask-mysql-db"):
+def import_sql_file(sql_file="mysql-init/insert_data.sql", db_name="ai_chatbot_db", container_name="flask-mysql-db"):
     print(f"\n📥 Importing data from {sql_file} into {db_name}...")
     root_pw = os.getenv('DB_ROOT_PASSWORD', 'supersecurepassword')
 
@@ -53,7 +53,18 @@ def import_sql_file(sql_file="mysql-init/insert_data.sql", db_name="ragdb", cont
         sys.exit(1)
 
 # Step 1: Validate each compose file
-validate_compose_files(compose_files)
+# validate_compose_files(compose_files) #replacing with combined validation block below. helper function commented out
+# Step 1: Validate combined docker-compose configuration
+print("\n🔍 Validating full docker-compose stack...")
+validate_cmd = ["docker-compose"]
+for f in compose_files:
+    validate_cmd.extend(["-f", f])
+try:
+    subprocess.run(validate_cmd + ["config"], check=True, capture_output=True)
+    print("✅ Compose files validated successfully.")
+except subprocess.CalledProcessError as e:
+    print(f"❌ Compose validation failed:\n{e.stderr.decode()}")
+    sys.exit(1)
 
 # Step 2: Compose build command
 cmd = ["docker-compose"]
@@ -73,9 +84,14 @@ try:
     subprocess.run(cmd + ["up", "--build"], check=True)
     print("\n✅ All services started successfully.")
 except subprocess.CalledProcessError as e:
-    print(f"\n❌ Failed to bring up services:\n{e.stderr.decode()}")
+    print(f"\n❌ Failed to bring up services:\n{e.stderr.decode() if e.stderr else str(e)}")
     sys.exit(1)
 
 # Step 5: Wait for MySQL, then import data
 wait_for_mysql()
-import_sql_file()
+import_sql_file(
+    sql_file="mysql-init/insert_data.sql",
+    db_name="ai_chatbot_db",
+    container_name="ai_chatbot_db"
+)
+

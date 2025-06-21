@@ -2,19 +2,19 @@ version: '3.8'
 
 services:
   db:
+    container_name: ai_chatbot_db
     image: mysql:8.0
-    container_name: flask-mysql-db
-    restart: always
+    ports:
+      - "3307:3306"  # external_port:internal_mysql_port
     environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
-      - db_data:/var/lib/mysql
-      - ./mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    ports:
-      - "3306:3306"
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    restart: always
 
 volumes:
-  db_data:
+  mysql-data:

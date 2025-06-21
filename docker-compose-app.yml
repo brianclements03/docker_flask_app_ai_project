@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
-  flask-app:
+  flask-app-chatbot:
     build: ./app
-    container_name: flask-app
+    container_name: flask-app-chatbot
     restart: always
     ports:
-      - "5000:5000"
+      - "5001:5001"  # New port to avoid conflict
     environment:
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}

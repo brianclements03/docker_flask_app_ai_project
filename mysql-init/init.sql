@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS ragdb;
-USE ragdb;
+CREATE DATABASE IF NOT EXISTS ai_chatbot_db;
+USE ai_chatbot_db;
 
 CREATE TABLE IF NOT EXISTS customers (
   customerID VARCHAR(50) PRIMARY KEY,
