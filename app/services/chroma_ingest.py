@@ -30,16 +30,15 @@ def ingest_schema(docs):
     print("✅ Schema documents embedded and stored.")
 
 
-# def ingest_schema(schema_elements: list):
-#     """
-#     schema_elements: list of dicts like
-#     [
-#         {"id": "customers_customerID", "content": "Column 'customerID' in table 'customers' of type varchar},
-#         ...
-#     ]
-#     """
-#     collection.add(
-#         documents=[item["id"] for item in schema_elements],
-#         ids=[item["id"] for item in schema_elements],
-#         metadatas=[{"source": "schema"} for _ in schema_elements]
-#     )
+#similarity search in Chromadb functionality
+from services.chromadb_client import collection
+
+def search_similar(embedding: list, top_k: int = 5)
+    """
+    Perform a similarity search in ChromaDB using the given embedding.
+    """
+    results = collection.query(
+        query_embeddings=[embedding],
+        n_results=top_k
+    )
+    return results
