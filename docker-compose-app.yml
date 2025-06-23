@@ -17,5 +17,8 @@ services:
       - ./app:/flask-app/app
       - ./app/templates:/flask-app/app/templates
       - ./uploads:/flask-app/uploads
+      - sentence_model_cache:/root/.cache/torch/sentence_transformers
     depends_on:
       - db
+volumes:
+  sentence_model_cache:

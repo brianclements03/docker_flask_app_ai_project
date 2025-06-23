@@ -1,8 +1,8 @@
 import chromadb
-from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFuntion
+from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
 #use the same embedding model as the user question
-embedding_fn = SentenceTransformerEmbeddingFuntion(model_name="all-MiniLM-L6-v2")
+embedding_fn = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
 
 client = chromadb.HttpClient(host="chromadb", port=8000) #adjust for localhost
 

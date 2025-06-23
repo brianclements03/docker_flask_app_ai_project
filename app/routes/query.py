@@ -2,22 +2,37 @@ from flask import Blueprint, request, render_template
 from services.embedder import embed_text
 from services.chroma_ingest import search_similar
 from services.prompt_builder import build_sql_prompt
+from services.ollama_client import query_ollama
 
 query = Blueprint("query", __name__)
 
-embedding = embed_text(question)
-
-results = search_similar(embedding)
-
-top_docs = results['documents'][0] #list of strings
-
-prompt = build_sql_prompt(question, top_docs)
-
 @query.route("/query", methods=["POST"])
 def generate_sql():
-    question = request.form.get("question")
+    question = request.form.get("question", "")
+    print(f"\n Received question: {question}")
 
-    # TEMP: mock SQL output — this will later call your RAG pipeline
-    mock_sql = f"-- Mock SQL generated from: \"{question}\"\nSELECT * FROM customers WHERE state = 'TX';"
+    #step 1: embed user question
+    embedding = embed_text(question)
+    print(f" Embedding shape: {len(embedding)} dimensions")
 
-    return render_template("index.html", generated_sql=mock_sql)
+    #step 2: query chromadb for similar schema snippets
+    results = search_similar(embedding)
+    print(f" chroma returned {len(results['documents'][0])} matching snippets")
+
+    #step 3: extract top schema docs (as strings)
+    top_docs = results["documents"][0]
+    print("Top schema snippets:")
+    for doc in top_docs:
+        print(f" - {doc.strip()}")
+
+    #step 4: build prompt for SQL generation
+    prompt = build_sql_prompt(question, top_docs)
+    print("\n Final prompt sent to Ollama: \n")
+    print(prompt)
+
+    #step 5: send prompt to Ollama; get sql
+    generated_sql = query_ollama(prompt)
+    print("\n Generated SQL: \n")
+    return render_template("index.html", generated_sql=generated_sql)
+
+    return render_template("index.html", generated_sql=generated_sql)

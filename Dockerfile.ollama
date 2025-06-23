@@ -1,0 +1,8 @@
+# Dockerfile.ollama
+FROM ollama/ollama
+
+COPY zscaler-root.crt /usr/local/share/ca-certificates/zscaler.crt
+
+RUN apt-get update \
+  && apt-get install -y ca-certificates \
+  && update-ca-certificates

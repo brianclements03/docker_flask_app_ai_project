@@ -1,6 +1,7 @@
 from services.chromadb_client import collection
 import chromadb
 from chromadb.utils import embedding_functions
+from sentence_transformers import SentenceTransformer
 
 #initialize chroma client
 client = chromadb.HttpClient(host="chromadb",port=8000)
@@ -33,7 +34,7 @@ def ingest_schema(docs):
 #similarity search in Chromadb functionality
 from services.chromadb_client import collection
 
-def search_similar(embedding: list, top_k: int = 5)
+def search_similar(embedding: list, top_k: int = 5):
     """
     Perform a similarity search in ChromaDB using the given embedding.
     """

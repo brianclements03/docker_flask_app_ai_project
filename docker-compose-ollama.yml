@@ -1,14 +1,40 @@
-version: '3.8'
-
 services:
   ollama:
-    image: ollama/ollama
+    build:
+      context: .
+      dockerfile: Dockerfile.ollama
     container_name: ollama
-    restart: always
+    entrypoint: ["/bin/sh", "/ollama-entrypoint.sh"]
+    volumes:
+      - ./ollama-entrypoint.sh:/ollama-entrypoint.sh:ro
+      - ollama_data:/root/.ollama
     ports:
       - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-
+    networks:
+      - default
+    restart: unless-stopped
 volumes:
   ollama_data:
+
+
+
+# services:
+#   ollama:
+#     image: ollama/ollama
+#     container_name: ollama
+#     # entrypoint: ["/bin/sh", "/ollama-entrypoint.sh"]
+#     entrypoint: ["/bin/sh", "ollama-entrypoint.sh"] #["ollama", "serve"]
+#     volumes:
+#       - ./ollama-entrypoint.sh:/ollama-entrypoint.sh:ro
+#       - ollama_data:/root/.ollama
+#     ports:
+#       - "11434:11434"
+#     networks:
+#       - default
+#     # depends_on:
+#     #   - ai_chatbot_db
+#     #   - chromadb
+#     restart: unless-stopped
+
+# volumes:
+#   ollama_data:
