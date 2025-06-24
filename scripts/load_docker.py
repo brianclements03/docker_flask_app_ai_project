@@ -2,6 +2,7 @@ import subprocess
 import sys
 import time
 import os
+import argparse
 
 compose_files = [
     "docker-compose-mysql.yml",
@@ -10,14 +11,10 @@ compose_files = [
     "docker-compose-app.yml"
 ]
 
-# def validate_compose_files(files):
-#     for f in files:
-#         print(f"🔍 Validating {f}...")
-#         try:
-#             subprocess.run(["docker-compose", "-f", f, "config"], check=True, capture_output=True)
-#         except subprocess.CalledProcessError as e:
-#             print(f"❌ Error in {f}:\n{e.stderr.decode()}")
-#             sys.exit(1)
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument("--detached", action="store_true", help="Run docker-compose in detached mode")
+#     args = parser.parse_args()
 
 def wait_for_mysql(container_name="flask-mysql-db", retries=10, delay=2):
     print("\n⏳ Waiting for MySQL to be ready...")
@@ -80,8 +77,11 @@ except subprocess.CalledProcessError as e:
 
 # Step 4: Bring everything up
 print("\n🚀 Rebuilding and starting all services...")
+# up_cmd = cmd + ["up","--build"]
+# if args.detached:
+#     up_cmd.append("-d")
 try:
-    subprocess.run(cmd + ["up", "--build"], check=True)
+    subprocess.run(cmd + ["up","--build"], check=True)
     print("\n✅ All services started successfully.")
 except subprocess.CalledProcessError as e:
     print(f"\n❌ Failed to bring up services:\n{e.stderr.decode() if e.stderr else str(e)}")
