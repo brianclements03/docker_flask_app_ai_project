@@ -1,0 +1,1 @@
+This project builds a back-end database (using the well-known 'customer churn' data set) and uses a RAG archtecture to allow a user to submit natural-language questions that are answered with database-relevant SQL queries. 
