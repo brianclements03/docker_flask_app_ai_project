@@ -14,11 +14,14 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       PORT: ${PORT}
     volumes:
-      - ./app:/flask-app/app
-      - ./app/templates:/flask-app/app/templates
-      - ./uploads:/flask-app/uploads
+      - .:/flask-app
+      # - ./app:/flask-app/app
+      # - ./app/templates:/flask-app/app/templates
+      # - ./uploads:/flask-app/uploads
       - sentence_model_cache:/root/.cache/torch/sentence_transformers
+      - ./scripts:/flask-app/scripts
     depends_on:
       - db
+      - chromadb
 volumes:
   sentence_model_cache:

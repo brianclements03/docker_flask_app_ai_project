@@ -1,8 +1,8 @@
 from flask import Blueprint, request, render_template
-from services.embedder import embed_text
-from services.chroma_ingest import search_similar
-from services.prompt_builder import build_sql_prompt
-from services.ollama_client import query_ollama
+from app.services.embedder import embed_text
+from app.services.chroma_ingest import search_similar
+from app.services.prompt_builder import build_sql_prompt
+from app.services.ollama_client import query_ollama
 
 query = Blueprint("query", __name__)
 

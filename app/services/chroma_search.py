@@ -1,4 +1,4 @@
-from services.chromadb_client import collection
+from app.services.chromadb_client import collection
 
 def search_similar_elements(user_question: str, top_k: int = 5):
     return collection.query(

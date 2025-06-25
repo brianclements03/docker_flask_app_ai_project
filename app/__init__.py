@@ -8,7 +8,7 @@ import time
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object("config.Config")  # centralized config
+    app.config.from_object("app.config.Config")  # centralized config
     db.init_app(app)
 
     # Register routes via Blueprints

@@ -8,7 +8,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - chroma_data:/chroma
+      - chroma_data:/chromadb-data
+    environment:
+      - CHROMA_DB_DIR=/chromadb-data
 
 volumes:
   chroma_data:

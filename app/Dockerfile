@@ -4,6 +4,8 @@ FROM python:3.11-slim
 
 WORKDIR /flask-app
 
+ENV PYTHONPATH=/flask-app
+
 # 🛡️ Copy Zscaler cert into container
 COPY zscaler-root.crt /usr/local/share/ca-certificates/zscaler.crt
 
@@ -13,14 +15,17 @@ RUN apt-get update && apt-get install -y \
     curl \
     && update-ca-certificates
 
+#copy rqmts *first*, for caching pip install
+COPY requirements.txt .
+
 # 📜 Tell Python to use updated cert chain
 ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
-# 📁 Now copy the rest of your app AFTER cert is in place
-COPY . .
-
 # 🐍 Install dependencies
 RUN pip install --upgrade pip && pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
+
+# 📁 Now copy the rest of your app AFTER cert is in place
+COPY . .
 
 # 🌐 Flask app port
 EXPOSE 5001
@@ -44,4 +49,5 @@ RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTr
 RUN test -d /root/.cache/torch/sentence_transformers && echo "✅ Model cached successfully" || echo "❌ Model not found"
 
 # 🚀 Start app with Gunicorn
-CMD gunicorn --bind 0.0.0.0:${PORT:-5000} run:app
+# CMD gunicorn --bind 0.0.0.0:${PORT:-5000} run:app
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5001", "app.run:app"]

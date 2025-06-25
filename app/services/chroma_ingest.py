@@ -1,4 +1,4 @@
-from services.chromadb_client import collection
+from app.services.chromadb_client import collection
 import chromadb
 from chromadb.utils import embedding_functions
 from sentence_transformers import SentenceTransformer
@@ -7,24 +7,26 @@ from sentence_transformers import SentenceTransformer
 client = chromadb.HttpClient(host="chromadb",port=8000)
 
 #choose or create collection
-collection = client.get_or_create_collection(name="schema_docs")
+collection = client.get_or_create_collection(name="schema")
 
 #load embedding model
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-def ingest_schema(docs):
-    text = [docs['text'] for doc in docs]
-    ids = [doc['id'] for doc in docs]
-    metadata = [doc['metatdata'] for doc in docs]
+def ingest_schema(docs: list[dict]):
+    texts = [doc["content"] for doc in docs]
+    ids = [doc["id"] for doc in docs]
+    metadata = [{"source": "schema"} for _ in docs]
 
     #compute embeddings
     print("🔢 Embedding schema documents...")
     embeddings = model.encode(texts).tolist()
 
     print("💾 Adding to Chroma collection...")
+    print(f"🧪 First doc sample:\n{texts[0]}\n{embeddings[0]}\n{ids[0]}")
+
     collection.add(
         documents=texts,
-        embeddings=embeddings,
+        # embeddings=embeddings,
         ids=ids,
         metadatas=metadata
     )
@@ -32,7 +34,7 @@ def ingest_schema(docs):
 
 
 #similarity search in Chromadb functionality
-from services.chromadb_client import collection
+from app.services.chromadb_client import collection
 
 def search_similar(embedding: list, top_k: int = 5):
     """

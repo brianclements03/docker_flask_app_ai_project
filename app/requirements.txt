@@ -5,6 +5,7 @@ Flask-SQLAlchemy
 pymysql
 cryptography
 openpyxl
-pandas
-chromadb>=0.4.0
+# pandas
+chromadb
 sentence-transformers
+sqlalchemy
