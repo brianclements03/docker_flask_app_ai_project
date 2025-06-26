@@ -23,7 +23,7 @@ def generate_sql():
     top_docs = results["documents"][0]
     print("Top schema snippets:")
     for doc in top_docs:
-        print(f" - {doc.strip()}")
+        print(f"Top docs are: - {doc.strip()}")
 
     #step 4: build prompt for SQL generation
     prompt = build_sql_prompt(question, top_docs)

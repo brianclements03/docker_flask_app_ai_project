@@ -26,7 +26,7 @@ def ingest_schema(docs: list[dict]):
 
     collection.add(
         documents=texts,
-        # embeddings=embeddings,
+        embeddings=embeddings,
         ids=ids,
         metadatas=metadata
     )
@@ -44,4 +44,6 @@ def search_similar(embedding: list, top_k: int = 5):
         query_embeddings=[embedding],
         n_results=top_k
     )
+    print(f"Scores: {results['distances'][0]}")
+
     return results
